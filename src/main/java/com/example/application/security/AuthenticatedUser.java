@@ -1,7 +1,6 @@
 package com.example.application.security;
 
-import com.example.application.data.entity.User;
-import com.example.application.data.service.UserRepository;
+import com.google.firebase.auth.FirebaseToken;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.server.VaadinServletRequest;
 import java.util.Optional;
@@ -16,17 +15,20 @@ import org.springframework.stereotype.Component;
 @Component
 public class AuthenticatedUser {
 
-    @Autowired
-    private UserRepository userRepository;
-
-    private Optional<Authentication> getAuthentication() {
+    public Optional<Authentication> getAuthentication() {
         SecurityContext context = SecurityContextHolder.getContext();
         return Optional.ofNullable(context.getAuthentication())
                 .filter(authentication -> !(authentication instanceof AnonymousAuthenticationToken));
     }
 
-    public Optional<User> get() {
-        return getAuthentication().map(authentication -> userRepository.findByUsername(authentication.getName()));
+    public Optional<FirebaseToken> get() {
+        Optional<Authentication> authentication = getAuthentication();
+        if(authentication.isEmpty()) {
+            return Optional.empty();
+        } else {
+            FirebaseToken token = (FirebaseToken) authentication.get().getDetails();
+            return Optional.ofNullable(token);
+        }
     }
 
     public void logout() {
