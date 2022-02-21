@@ -5,6 +5,12 @@ The app is built based on start.vaadin.com template, with Spring Security
 setup enabled, but instead of storing users in local JPA backend, Firebase
 Authentication is used.
 
+This example uses the "web" library to create the access token on the browser
+side and then shares that with the Vaadin application. An alternative approach 
+would be to implement this completely on the server side by doing to the 
+authentication request as described in [this SoF response](https://stackoverflow.com/questions/40824660/firebase-user-authentication-for-java-application-not-android) 
+or by checking if the official Android library could be used.
+
 Things to check out in this example.
 
  * _FirebaseService_ class. A class that initializes Firebase server side API, 
