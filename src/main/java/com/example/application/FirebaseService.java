@@ -68,9 +68,11 @@ public class FirebaseService {
     }
 
     public Authentication login(String token) throws FirebaseAuthException {
-        FirebaseToken firebaseToken = FirebaseAuth.getInstance().verifyIdToken(token);
+        boolean checkRevoked = true;
+        FirebaseToken firebaseToken = FirebaseAuth.getInstance().verifyIdToken(token, checkRevoked);
         // Note, before important actions, the token should be re-validate,
-        // it could be revoked or the user could be removed altogether
+        // it could be revoked or the user could be removed altogether,
+        // during their session
 
         return new Authentication() {
             @Override

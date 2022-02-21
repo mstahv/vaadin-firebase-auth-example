@@ -17,6 +17,16 @@ Things to check out in this example.
    Spring Security context (saved further in Java session).
  * Adapted Spring Security configuartion in the _security_ package.
 
+### Improvements needed for larger app
+
+ * Currently the example doesn't support roles, but those should be rather
+   easy to implement with "custom claims".
+ * Session persistency. Currently, the token passed to server side will 
+   probably become invalid even if user Vaadin session is active. Should
+   timely pass the refreshed token to the server side. Service worker
+   appraoch could be used. Or just fetching the refreshed token 
+   asynchronously when the session should be verified.
+
 ## Running the application
 
 **To run the example yourself, you'll need to create a Firebase Project and

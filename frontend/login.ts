@@ -1,7 +1,6 @@
 import { html, LitElement } from 'lit';
-import {customElement, property, query} from 'lit/decorators.js';
-import {ref} from 'lit/directives/ref.js';
-import '@vaadin/vaadin-login/vaadin-login-overlay.js';
+import {customElement, query} from 'lit/decorators.js';
+import { LoginI18n, LoginOverlay } from '@vaadin/vaadin-login/vaadin-login-overlay.js';
 
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
@@ -23,7 +22,6 @@ const app = initializeApp(firebaseConfig);
 @customElement('login-view')
 class LoginView extends LitElement {
 
-     // @ts-ignore
     private i18n: LoginI18n = {
       header: {
         title: 'Vaadin + Firebase Auth example',
@@ -34,6 +32,7 @@ class LoginView extends LitElement {
         username: 'Email',
         password: 'Password',
         submit: 'Login',
+        forgotPassword: '',
       },
       errorMessage: {
         title: 'Wrong email/password',
@@ -47,9 +46,13 @@ class LoginView extends LitElement {
 `;
     }
 
+    @query('vaadin-login-overlay')
+    private login?: LoginOverlay;
+
+
     private _login(e: CustomEvent) {
         const auth = getAuth();
-        // @ts-ignore
+       
         signInWithEmailAndPassword(auth, e.detail.username, e.detail.password)
           .then((userCredential) => {
             // Signed in
@@ -62,10 +65,10 @@ class LoginView extends LitElement {
           .catch((error) => {
             const errorCode = error.code;
             const errorMessage = error.message;
-            // @ts-ignore
-            this.shadowRoot.querySelector("vaadin-login-overlay").disabled = false;
-            // @ts-ignore
-            this.shadowRoot.querySelector("vaadin-login-overlay").error = true;
+            if(this.login) {
+              this.login.disabled = false;
+              this.login.error = true;
+            }
           });
     }
 }
