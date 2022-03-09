@@ -23,7 +23,12 @@ public class HelloWorldView extends HorizontalLayout {
 
     public HelloWorldView(AuthenticatedUser user) {
         name = new TextField("Your name (prefilled from Authentication)");
-        user.getAuthentication().ifPresent( auth -> name.setValue(auth.getName()));
+        user.getAuthentication().ifPresent( auth -> {
+            // null check in case the name is not set
+            if(auth.getName() != null) {
+                name.setValue(auth.getName());
+            }
+        });
         sayHello = new Button("Say hello");
         sayHello.addClickListener(e -> {
             Notification.show("Hello " + name.getValue());
